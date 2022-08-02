@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
-import Avatar from '../components/Avatar'
-import AppLayout from '../components/AppLayout'
-import Button from '../components/Button'
-import Github from '../components/Github'
+
+import Avatar from 'components/Avatar'
+import AppLayout from 'components/AppLayout'
+import Button from 'components/Button'
+import Github from 'components/Icons/Github'
+import Logo from 'components/Icons/Logo'
+
 import { colors } from '../styles/theme'
 import { loginWithGithub, isLogedIn, GithubSignOut } from '../firebase/client'
 
@@ -37,6 +40,7 @@ export default function Home () {
       </Head>
 
       <AppLayout>
+        <Logo width={200} fill={colors.secondary} />
         <h1>
           TwitterDev
         </h1>

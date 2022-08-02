@@ -22,6 +22,7 @@ export default css`
     main {
       width: ${breakpoints.mobile};
       height: 90vh;
+      position: relative;
     }
   }
 `
