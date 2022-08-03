@@ -1,36 +1,71 @@
 import { useState, useEffect } from 'react'
 import AppLayout from 'components/AppLayout'
-import Avatar from 'components/Avatar'
 import Twit from 'components/Twit'
+import { fetchLatestTwits, GithubSignOut } from '../../firebase/client'
+import useUser from 'hooks/useUser'
+import Link from 'next/link'
+import Create from 'components/Icons/Create'
+import Search from 'components/Icons/Search'
+import HomeIcon from 'components/Icons/Home'
+import Head from 'next/head'
 
 export default function Home () {
   const [timeline, setTimeline] = useState([])
+  const user = useUser() // TODO: cambiar luego
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/statuses/home_timeline')
-      .then((res) => res.json())
+    user && fetchLatestTwits()
       .then(setTimeline)
-  }, [])
+  }, [user])
+
+  const signOut = () => {
+    GithubSignOut()
+      .catch(err => {
+        console.log(err)
+      })
+  }
 
   return (
     <>
       <AppLayout>
+        <Head>
+          <title>Inicio / TwitterDev</title>
+        </Head>
         <header>
           {/* <Avatar width={35} height={35} /> */}
           <h2>Inicio</h2>
+          <button onClick={signOut}>
+            Log out
+          </button>
         </header>
         <section>
-          {timeline.map(({ id, avatar, message, username }) => (
+          {timeline.map(({ id, avatar, content, userName, createdAt }) => (
             <Twit
               key={id}
-              username={username}
-              message={message}
+              userName={userName}
+              content={content}
               avatar={avatar}
               id={id}
+              createdAt={createdAt}
             />
           ))}
         </section>
         <nav>
+          <Link href='/home'>
+            <a>
+              <HomeIcon width={32} height={32} stroke="#09f" />
+            </a>
+          </Link>
+          <Link href='/search'>
+            <a>
+              <Search width={32} height={32} stroke="#09f" />
+            </a>
+          </Link>
+          <Link href='/compose/tweet'>
+            <a>
+              <Create width={32} height={32} stroke="#09f" />
+            </a>
+          </Link>
         </nav>
       </AppLayout>
       <style jsx>{`
@@ -64,6 +99,9 @@ export default function Home () {
           height: 49px;
           position: absolute;
           width: 100%;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
         }
       `}</style>
     </>

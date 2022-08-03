@@ -5,6 +5,7 @@ import {
   GithubAuthProvider
 } from 'firebase/auth'
 import { initializeApp } from 'firebase/app'
+import { getFirestore, collection, Timestamp, addDoc, getDocs, query, orderBy } from 'firebase/firestore/lite'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyB39sqrb6FHDGvTsgp44oUAdpUebaRTdV4',
@@ -16,23 +17,26 @@ const firebaseConfig = {
 }
 
 const app = initializeApp(firebaseConfig)
-
+const db = getFirestore(app)
 const provider = new GithubAuthProvider()
 const auth = getAuth(app)
 
-export const GithubSignOut = () => {
-  return auth.signOut()
+const mapUserFromFirebaseAuthToUser = (user) => {
+  const { reloadUserInfo: { screenName }, displayName, email, photoURL, uid } = user
+
+  return {
+    avatar: photoURL,
+    email,
+    userName: screenName,
+    name: displayName,
+    uid
+  }
 }
 
 export const isLogedIn = (setUser) => {
   return onAuthStateChanged(auth, (newUser) => {
     if (newUser) {
-      const user = {
-        avatar: newUser.photoURL,
-        email: newUser.email,
-        username: newUser.reloadUserInfo.screenName,
-        name: newUser.displayName
-      }
+      const user = mapUserFromFirebaseAuthToUser(newUser)
       setUser(user)
     } else {
       setUser(null)
@@ -42,16 +46,38 @@ export const isLogedIn = (setUser) => {
 
 export const loginWithGithub = () => {
   return signInWithPopup(auth, provider)
-    .then(result => {
-      console.log(result)
-      const { photoURL, email, reloadUserInfo: { screenName, displayName } } = result.user
-      return {
-        avatar: photoURL,
-        email,
-        username: screenName,
-        name: displayName
-      }
-    }).catch((error) => {
-      console.log(error)
-    })
+}
+
+export const GithubSignOut = () => {
+  return auth.signOut()
+}
+
+export const addTweet = ({ avatar, content, userId, userName }) => {
+  return addDoc(collection(db, 'twits'), {
+    avatar,
+    content,
+    userId,
+    userName,
+    createdAt: Timestamp.fromDate(new Date()),
+    likesCount: 0,
+    sharedCount: 0
+  })
+}
+
+export const fetchLatestTwits = async () => {
+  const twitsRef = collection(db, 'twits')
+  const q = query(twitsRef, orderBy('createdAt', 'desc'))
+  const querySnapshot = await getDocs(q)
+
+  return querySnapshot.docs.map(doc => {
+    const id = doc.id
+    const data = doc.data()
+    const { createdAt } = data
+
+    return {
+      ...data,
+      id,
+      createdAt: +createdAt.toDate()
+    }
+  })
 }

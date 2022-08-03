@@ -43,4 +43,18 @@ export const globalStyles = css.global`
   * {
     box-sizing: border-box;
   }
+
+  svg {
+    display: flex;
+    align-items: center;
+  }
+
+  svg > g {
+    transform: scale(1.3)
+  }
+
+  textarea,
+  input {
+    font-family: ${fonts.base};
+  }
 `

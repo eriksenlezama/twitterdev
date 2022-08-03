@@ -1,18 +1,21 @@
 import Avatar from 'components/Avatar'
+import useTimeAgo from 'hooks/useTimeAgo'
 
-export default function Twit ({ avatar, id, message, username }) {
+export default function Twit ({ avatar, id, content, userName, createdAt }) {
+  const timeago = useTimeAgo(createdAt)
+
   return (
     <>
       <article key={id}>
         <div>
           <Avatar
-            alt={username}
+            alt={userName}
             src={avatar}
           />
         </div>
         <section>
-          <strong>{username}</strong>
-          <p>{message}</p>
+          <p><strong>{userName}</strong> . {timeago}</p>
+          <p>{content}</p>
         </section>
       </article>
 
@@ -20,7 +23,7 @@ export default function Twit ({ avatar, id, message, username }) {
         article {
           display: flex;
           padding: 10px 12px;
-          border-bottom: 2px solid #e8f4ff;
+          border-bottom: 2px solid #eee;
         }
 
         div {
@@ -29,6 +32,11 @@ export default function Twit ({ avatar, id, message, username }) {
 
         section {
           width: fit-content;
+        }
+
+        p {
+          margin: 0;
+          font-size: 16px;
         }
       `}</style>
     </>
