@@ -39,13 +39,14 @@ export default function Home () {
           </button>
         </header>
         <section>
-          {timeline.map(({ id, avatar, content, userName, createdAt }) => (
+          {timeline.map(({ id, avatar, content, userName, createdAt, image }) => (
             <Twit
               key={id}
               userName={userName}
               content={content}
               avatar={avatar}
               id={id}
+              image={image}
               createdAt={createdAt}
             />
           ))}

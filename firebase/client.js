@@ -4,8 +4,17 @@ import {
   onAuthStateChanged,
   GithubAuthProvider
 } from 'firebase/auth'
+import {
+  getFirestore,
+  collection,
+  Timestamp,
+  addDoc,
+  getDocs,
+  query,
+  orderBy
+} from 'firebase/firestore/lite'
 import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, Timestamp, addDoc, getDocs, query, orderBy } from 'firebase/firestore/lite'
+import { getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyB39sqrb6FHDGvTsgp44oUAdpUebaRTdV4',
@@ -20,6 +29,8 @@ const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const provider = new GithubAuthProvider()
 const auth = getAuth(app)
+const storage = getStorage()
+const storageRef = ref(storage)
 
 const mapUserFromFirebaseAuthToUser = (user) => {
   const { reloadUserInfo: { screenName }, displayName, email, photoURL, uid } = user
@@ -52,12 +63,13 @@ export const GithubSignOut = () => {
   return auth.signOut()
 }
 
-export const addTweet = ({ avatar, content, userId, userName }) => {
+export const addTweet = ({ avatar, content, userId, userName, image }) => {
   return addDoc(collection(db, 'twits'), {
     avatar,
     content,
     userId,
     userName,
+    image,
     createdAt: Timestamp.fromDate(new Date()),
     likesCount: 0,
     sharedCount: 0
@@ -80,4 +92,11 @@ export const fetchLatestTwits = async () => {
       createdAt: +createdAt.toDate()
     }
   })
+}
+
+export const uploadImage = async (file) => {
+  const imagesRef = ref(storageRef, `images/${file.name}`)
+  const uploadTask = uploadBytesResumable(imagesRef, file)
+
+  return uploadTask
 }
