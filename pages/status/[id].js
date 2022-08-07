@@ -1,9 +1,9 @@
-import Twit from 'components/Twit'
+import TweetPage from 'pages/TweetPage'
 
-export default function TweetPage (props) {
+export default function TweetDynamicPage (props) {
   return (
     <>
-      <Twit {...props} />
+      {props.id && <TweetPage {...props} />}
       <style jsx>{`
         div {
           width: 100%;

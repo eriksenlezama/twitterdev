@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react'
-import Twit from 'components/Twit'
-import { fetchLatestTwits, GithubSignOut } from '../../firebase/client'
+import Tweet from 'components/Tweet'
+import { GithubSignOut, listenLatestTweets } from '../../firebase/client'
 import useUser from 'hooks/useUser'
 import Link from 'next/link'
 import Create from 'components/Icons/Create'
 import Search from 'components/Icons/Search'
 import HomeIcon from 'components/Icons/Home'
 import Head from 'next/head'
+import { colors } from 'styles/theme'
 
 export default function Home () {
   const [timeline, setTimeline] = useState([])
   const user = useUser()
 
   useEffect(() => {
-    user && fetchLatestTwits()
-      .then(setTimeline)
+    let unsubscribe
+    if (user) {
+      unsubscribe = listenLatestTweets(setTimeline)
+    }
+
+    return () => unsubscribe && unsubscribe()
   }, [user])
 
   const signOut = () => {
@@ -27,18 +32,17 @@ export default function Home () {
   return (
     <>
       <Head>
-        <title>Inicio / TwitterDev</title>
+        <title>Home / TwitterDev</title>
       </Head>
       <header>
-        {/* <Avatar width={35} height={35} /> */}
-        <h2>Inicio</h2>
+        <h2>Home</h2>
         <button onClick={signOut}>
           Log out
         </button>
       </header>
       <section>
         {timeline.map(({ id, avatar, content, userName, createdAt, image }) => (
-          <Twit
+          <Tweet
             key={id}
             userName={userName}
             content={content}
@@ -76,10 +80,29 @@ export default function Home () {
           width: 100%;
           display: flex;
           align-items: center;
+          justify-content: space-between;
         }
 
         h2 {
           font-size: 20px;
+          margin-left: 12px;
+        }
+
+        button {
+          margin-right: 12px;
+          border: none;
+          background: transparent;
+          color: ${colors.black};
+          padding: 8px 15px;
+          font-size: 16px;
+          font-weight: bold;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        button:hover {
+
+          text-decoration: underline;
         }
 
         section {

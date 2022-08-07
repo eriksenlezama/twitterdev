@@ -102,7 +102,7 @@ export default function Tweet () {
   return (
     <>
       <Head>
-        <title>Crear un Tweet / TwitterDev</title>
+        <title>Create Tweet / TwitterDev</title>
       </Head>
       <section>
         {user && (
@@ -112,7 +112,7 @@ export default function Tweet () {
         )}
         <form onSubmit={handleSubmit}>
           <textarea
-            placeholder='¿Qué está pasando?'
+            placeholder='What is happening?'
             value={message}
             onChange={handleChange}
             onDragEnter={handleDragEnter}
@@ -127,7 +127,7 @@ export default function Tweet () {
           <div>
             <Button
               disabled={isButtonDisabled}
-            >Twittear</Button>
+            >Tweet</Button>
           </div>
         </form>
       </section>
@@ -137,6 +137,7 @@ export default function Tweet () {
           display: flex;
           width: 100%;
           align-items: flex-start;
+          height: 100%;
         }
 
         div:not(.image-container, .avatar-container) {

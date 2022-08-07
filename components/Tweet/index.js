@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-export default function Twit ({ avatar, id, content, userName, createdAt, image }) {
+export default function Tweet ({ avatar, id, content, userName, createdAt, image }) {
   const createdAtFormated = useTimeAgo(createdAt)
   const router = useRouter()
 
@@ -12,6 +12,8 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
     e.preventDefault()
     router.push(`/status/${id}`)
   }
+
+  const timeTitle = new Date(createdAt).toLocaleString()
 
   return (
     <>
@@ -30,13 +32,13 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
             <span> . </span>
             <Link href={`/status/${id}`}>
               <a className='time-link'>
-                <time time={createdAt}>{createdAtFormated}</time>
+                <time title={timeTitle} time={createdAt}>{createdAtFormated}</time>
               </a>
             </Link>
           </header>
           <p>{content}</p>
           {image && <div className='image'>
-            <Image src={image} alt={content} layout='fill' />
+            <Image src={image} alt={content} objectFit='cover' layout='fill' />
           </div>}
         </section>
       </article>
@@ -60,14 +62,13 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
 
         .image {
           position: relative;
-          width: 100%;
           height: 240px;
           margin-top: 10px;
         }
 
         section {
           margin-left: 8px;
-          width: fit-content;
+          width: 100%;
         }
 
         p {
@@ -82,6 +83,13 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
         .time-link:hover {
           text-decoration: underline;
         }
+      `}</style>
+
+      <style jsx global>{`
+        .image img {
+            border-radius: 16px;
+            height: auto;
+          }
       `}</style>
     </>
   )

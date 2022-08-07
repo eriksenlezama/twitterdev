@@ -9,10 +9,10 @@ import {
   collection,
   Timestamp,
   addDoc,
-  getDocs,
+  onSnapshot,
   query,
   orderBy
-} from 'firebase/firestore/lite'
+} from 'firebase/firestore'
 import { initializeApp } from 'firebase/app'
 import { getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 
@@ -76,23 +76,38 @@ export const addTweet = ({ avatar, content, userId, userName, image }) => {
   })
 }
 
-export const fetchLatestTwits = async () => {
-  const twitsRef = collection(db, 'twits')
-  const q = query(twitsRef, orderBy('createdAt', 'desc'))
-  const querySnapshot = await getDocs(q)
+const mapTweetsFromQueries = doc => {
+  const id = doc.id
+  const data = doc.data()
+  const { createdAt } = data
 
-  return querySnapshot.docs.map(doc => {
-    const id = doc.id
-    const data = doc.data()
-    const { createdAt } = data
-
-    return {
-      ...data,
-      id,
-      createdAt: +createdAt.toDate()
-    }
-  })
+  return {
+    ...data,
+    id,
+    createdAt: +createdAt.toDate()
+  }
 }
+
+export const listenLatestTweets = callback => {
+  const q = query(collection(db, 'twits'), orderBy('createdAt', 'desc'))
+  const unsub = onSnapshot(q, (querySnapshot) => {
+    const twits = querySnapshot.docs.map(mapTweetsFromQueries)
+    callback(twits)
+  })
+
+  return unsub
+}
+
+// We do not use this because this is for 1 time fetching data.
+// Instead we use listenLatestTweets to subscribe to docs
+// -----------------------------------------------------------
+// export const fetchLatestTwits = async () => {
+//   const twitsRef = collection(db, 'twits')
+//   const q = query(twitsRef, orderBy('createdAt', 'desc'))
+//   const querySnapshot = await getDocs(q)
+
+//   return querySnapshot.docs.map(mapTweetsFromQueries)
+// }
 
 export const uploadImage = async (file) => {
   const imagesRef = ref(storageRef, `images/${file.name}`)
