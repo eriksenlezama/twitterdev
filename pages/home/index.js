@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import AppLayout from 'components/AppLayout'
 import Twit from 'components/Twit'
 import { fetchLatestTwits, GithubSignOut } from '../../firebase/client'
 import useUser from 'hooks/useUser'
@@ -11,7 +10,7 @@ import Head from 'next/head'
 
 export default function Home () {
   const [timeline, setTimeline] = useState([])
-  const user = useUser() // TODO: cambiar luego
+  const user = useUser()
 
   useEffect(() => {
     user && fetchLatestTwits()
@@ -27,48 +26,47 @@ export default function Home () {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Inicio / TwitterDev</title>
-        </Head>
-        <header>
-          {/* <Avatar width={35} height={35} /> */}
-          <h2>Inicio</h2>
-          <button onClick={signOut}>
-            Log out
-          </button>
-        </header>
-        <section>
-          {timeline.map(({ id, avatar, content, userName, createdAt, image }) => (
-            <Twit
-              key={id}
-              userName={userName}
-              content={content}
-              avatar={avatar}
-              id={id}
-              image={image}
-              createdAt={createdAt}
-            />
-          ))}
-        </section>
-        <nav>
-          <Link href='/home'>
-            <a>
-              <HomeIcon width={32} height={32} stroke="#09f" />
-            </a>
-          </Link>
-          <Link href='/search'>
-            <a>
-              <Search width={32} height={32} stroke="#09f" />
-            </a>
-          </Link>
-          <Link href='/compose/tweet'>
-            <a>
-              <Create width={32} height={32} stroke="#09f" />
-            </a>
-          </Link>
-        </nav>
-      </AppLayout>
+      <Head>
+        <title>Inicio / TwitterDev</title>
+      </Head>
+      <header>
+        {/* <Avatar width={35} height={35} /> */}
+        <h2>Inicio</h2>
+        <button onClick={signOut}>
+          Log out
+        </button>
+      </header>
+      <section>
+        {timeline.map(({ id, avatar, content, userName, createdAt, image }) => (
+          <Twit
+            key={id}
+            userName={userName}
+            content={content}
+            avatar={avatar}
+            id={id}
+            image={image}
+            createdAt={createdAt}
+          />
+        ))}
+      </section>
+      <nav>
+        <Link href='/home'>
+          <a>
+            <HomeIcon width={32} height={32} stroke="#09f" />
+          </a>
+        </Link>
+        <Link href='/search'>
+          <a>
+            <Search width={32} height={32} stroke="#09f" />
+          </a>
+        </Link>
+        <Link href='/compose/tweet'>
+          <a>
+            <Create width={32} height={32} stroke="#09f" />
+          </a>
+        </Link>
+      </nav>
+
       <style jsx>{`
         header {
           border-bottom: 1px solid #ccc;

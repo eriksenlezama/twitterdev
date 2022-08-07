@@ -30,3 +30,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# firebase keys
+/firebase/twitter-dev-firebase-adminsdk.json
+.env

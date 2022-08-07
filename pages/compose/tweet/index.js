@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import AppLayout from 'components/AppLayout'
 import Button from 'components/Button'
 import useUser from 'hooks/useUser'
 import Image from 'next/image'
@@ -102,38 +101,36 @@ export default function Tweet () {
 
   return (
     <>
-      <AppLayout>
-        <Head>
-          <title>Crear un Tweet / TwitterDev</title>
-        </Head>
-        <section>
-          {user && (
-            <div className='avatar-container'>
-              <Avatar src={user.avatar} />
-            </div>
+      <Head>
+        <title>Crear un Tweet / TwitterDev</title>
+      </Head>
+      <section>
+        {user && (
+          <div className='avatar-container'>
+            <Avatar src={user.avatar} />
+          </div>
+        )}
+        <form onSubmit={handleSubmit}>
+          <textarea
+            placeholder='¿Qué está pasando?'
+            value={message}
+            onChange={handleChange}
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+          ></textarea>
+          {image && (
+          <div className='image-container'>
+            <Image src={image} layout='fill' alt={image.name} />
+          </div>
           )}
-          <form onSubmit={handleSubmit}>
-            <textarea
-              placeholder='¿Qué está pasando?'
-              value={message}
-              onChange={handleChange}
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            ></textarea>
-            {image && (
-            <div className='image-container'>
-              <Image src={image} layout='fill' alt={image.name} />
-            </div>
-            )}
-            <div>
-              <Button
-                disabled={isButtonDisabled}
-              >Twittear</Button>
-            </div>
-          </form>
-        </section>
-      </AppLayout>
+          <div>
+            <Button
+              disabled={isButtonDisabled}
+            >Twittear</Button>
+          </div>
+        </form>
+      </section>
 
       <style jsx>{`
         section {

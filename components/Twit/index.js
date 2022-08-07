@@ -1,13 +1,21 @@
 import Avatar from 'components/Avatar'
 import useTimeAgo from 'hooks/useTimeAgo'
 import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 export default function Twit ({ avatar, id, content, userName, createdAt, image }) {
-  const timeago = useTimeAgo(createdAt)
+  const createdAtFormated = useTimeAgo(createdAt)
+  const router = useRouter()
+
+  const handleArticleClick = e => {
+    e.preventDefault()
+    router.push(`/status/${id}`)
+  }
 
   return (
     <>
-      <article key={id}>
+      <article onClick={handleArticleClick} key={id}>
         <div className='avatar'>
           <Avatar
             alt={userName}
@@ -15,7 +23,17 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
           />
         </div>
         <section>
-          <p><strong>{userName}</strong> . {timeago}</p>
+          <header>
+            <strong>
+              {userName}
+            </strong>
+            <span> . </span>
+            <Link href={`/status/${id}`}>
+              <a className='time-link'>
+                <time time={createdAt}>{createdAtFormated}</time>
+              </a>
+            </Link>
+          </header>
           <p>{content}</p>
           {image && <div className='image'>
             <Image src={image} alt={content} layout='fill' />
@@ -28,6 +46,12 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
           display: flex;
           padding: 10px 12px;
           border-bottom: 2px solid #eee;
+          cursor: pointer;
+          width: 100%;
+        }
+
+        article:hover {
+          background-color: #0099ff0d;
         }
 
         .avatar {
@@ -38,6 +62,7 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
           position: relative;
           width: 100%;
           height: 240px;
+          margin-top: 10px;
         }
 
         section {
@@ -48,6 +73,14 @@ export default function Twit ({ avatar, id, content, userName, createdAt, image 
         p {
           margin: 0;
           font-size: 16px;
+        }
+
+        .time-link {
+          text-decoration: none;
+        }
+
+        .time-link:hover {
+          text-decoration: underline;
         }
       `}</style>
     </>

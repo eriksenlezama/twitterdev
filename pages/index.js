@@ -2,7 +2,6 @@ import { useEffect } from 'react'
 import Head from 'next/head'
 
 import Image from 'next/image'
-import AppLayout from 'components/AppLayout'
 import Button from 'components/Button'
 import Github from 'components/Icons/Github'
 import Logo from 'components/Icons/Logo'
@@ -38,37 +37,35 @@ export default function Home () {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <AppLayout>
-        <Logo width={200} fill={colors.secondary} />
-        <h1>
-          TwitterDev
-        </h1>
-        <p>Dev talk community</p>
-        <p>Join us!</p>
-        <div>
-          {
-            user === null &&
-            <Button onClick={handleClick}>
-              <Github
-                width={28}
-                height={28}
-                fill={colors.white}
-              />
-              Login with GitHub
-            </Button>
-          }
-          {
-            user === undefined && (
-              <Image
-                src={spinner}
-                width={40}
-                height={40}
-                alt='Loading'
-              />
-            )
-          }
-        </div>
-      </AppLayout>
+      <Logo width={200} fill={colors.secondary} />
+      <h1>
+        TwitterDev
+      </h1>
+      <p>Dev talk community</p>
+      <p>Join us!</p>
+      <div>
+        {
+          user === null &&
+          <Button onClick={handleClick}>
+            <Github
+              width={28}
+              height={28}
+              fill={colors.white}
+            />
+            Login with GitHub
+          </Button>
+        }
+        {
+          user === undefined && (
+            <Image
+              src={spinner}
+              width={40}
+              height={40}
+              alt='Loading'
+            />
+          )
+        }
+      </div>
 
       <style jsx>{`
         h1 {
