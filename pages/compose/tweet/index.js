@@ -42,6 +42,7 @@ export default function Tweet () {
     if (task) {
       const onProgress = (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        // TODO: Add progress bar
         console.log('Upload is ' + progress + '% done')
       }
       const onError = (err) => console.log(err)
@@ -121,7 +122,7 @@ export default function Tweet () {
           ></textarea>
           {image && (
           <div className='image-container'>
-            <Image src={image} layout='fill' alt={image.name} />
+            <Image src={image} layout='fill' objectFit='cover' alt={image.name} />
           </div>
           )}
           <div>
@@ -169,6 +170,13 @@ export default function Tweet () {
           position: relative;
           width: 100%;
           height: 240px;
+        }
+      `}</style>
+
+      <style jsx global>{`
+        .image-container img {
+          border-radius: 16px;
+          height: auto;
         }
       `}</style>
     </>

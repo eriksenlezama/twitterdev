@@ -1,10 +1,14 @@
 import Tweet from 'components/Tweet'
 import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 export default function Home ({ key, userName, content, avatar, id, image, createdAt }) {
   const router = useRouter()
   return (
     <>
+      <Head>
+        <title>{userName}: {content}</title>
+      </Head>
       <div className='tweet-container'>
         <header>
           <button onClick={() => router.back()}>&#x2190;</button>

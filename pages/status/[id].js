@@ -17,8 +17,7 @@ export async function getServerSideProps (context) {
   const { params, res } = context
   const { id } = params
 
-  const url = `http://localhost:3000/api/tweets/${id}`
-
+  const url = `${process.env.BASE_URL}/api/tweets/${id}`
   const apiResponse = await fetch(url)
 
   if (apiResponse.ok) {

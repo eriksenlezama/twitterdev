@@ -1,11 +1,9 @@
 import Avatar from 'components/Avatar'
-import useTimeAgo from 'hooks/useTimeAgo'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 export default function Tweet ({ avatar, id, content, userName, createdAt, image }) {
-  const createdAtFormated = useTimeAgo(createdAt)
   const router = useRouter()
 
   const handleArticleClick = e => {
@@ -13,7 +11,7 @@ export default function Tweet ({ avatar, id, content, userName, createdAt, image
     router.push(`/status/${id}`)
   }
 
-  const timeTitle = new Date(createdAt).toLocaleString()
+  const timeTitle = new Date(createdAt).toLocaleDateString()
 
   return (
     <>
@@ -32,7 +30,7 @@ export default function Tweet ({ avatar, id, content, userName, createdAt, image
             <span> . </span>
             <Link href={`/status/${id}`}>
               <a className='time-link'>
-                <time title={timeTitle} time={createdAt}>{createdAtFormated}</time>
+                <time title={timeTitle} dateTime={timeTitle}>{timeTitle}</time>
               </a>
             </Link>
           </header>
@@ -87,9 +85,9 @@ export default function Tweet ({ avatar, id, content, userName, createdAt, image
 
       <style jsx global>{`
         .image img {
-            border-radius: 16px;
-            height: auto;
-          }
+          border-radius: 16px;
+          height: auto;
+        }
       `}</style>
     </>
   )

@@ -11,22 +11,17 @@ import {
   addDoc,
   onSnapshot,
   query,
-  orderBy
+  getDoc,
+  orderBy,
+  doc
 } from 'firebase/firestore'
 import { initializeApp } from 'firebase/app'
 import { getStorage, ref, uploadBytesResumable } from 'firebase/storage'
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyB39sqrb6FHDGvTsgp44oUAdpUebaRTdV4',
-  authDomain: 'twitter-dev-3d2db.firebaseapp.com',
-  projectId: 'twitter-dev-3d2db',
-  storageBucket: 'twitter-dev-3d2db.appspot.com',
-  messagingSenderId: '797050232319',
-  appId: '1:797050232319:web:27d180d09ed52230499bca'
-}
+const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
 
 const app = initializeApp(firebaseConfig)
-const db = getFirestore(app)
+export const db = getFirestore(app)
 const provider = new GithubAuthProvider()
 const auth = getAuth(app)
 const storage = getStorage()
@@ -108,6 +103,17 @@ export const listenLatestTweets = callback => {
 
 //   return querySnapshot.docs.map(mapTweetsFromQueries)
 // }
+
+export const fetchTweet = async id => {
+  const docRef = doc(db, 'twits', id)
+  const docSnap = await getDoc(docRef)
+
+  if (docSnap.exists()) {
+    return docSnap
+  } else {
+    console.log('No such document!')
+  }
+}
 
 export const uploadImage = async (file) => {
   const imagesRef = ref(storageRef, `images/${file.name}`)

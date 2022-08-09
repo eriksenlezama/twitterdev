@@ -1,13 +1,10 @@
-import { db } from '../../../firebase/admin'
+import { fetchTweet } from '../../../firebase/client'
 
 export default function handler (request, response) {
   const { query } = request
   const { id } = query
 
-  db
-    .collection('twits')
-    .doc(id)
-    .get()
+  fetchTweet(id)
     .then(doc => {
       const id = doc.id
       const data = doc.data()
