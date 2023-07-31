@@ -1,7 +1,5 @@
-## Twitter-Dev
+## Twitter clone
 
-This is a mini twitter clon for academic purposes
-
-[twitter-dev.eriksend.com](https://twitter-dev.eriksend.com/)
+This is a mini twitter clon for academic purposes following Midudev videos
 
 Created with Nextjs and Firebase
